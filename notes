@@ -1,0 +1,10 @@
+export PATH=/System/Library/Frameworks/JavaVM.framework/Versions/Current/Commands
+
+java -jar jruby.jar --version
+java -jar jruby.jar -e 'puts "goodbye space"'
+
+java -jar jruby.jar --command irb
+
+java -jar jruby-gems.jar -S gem list -l
+
+

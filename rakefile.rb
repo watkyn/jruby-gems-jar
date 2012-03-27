@@ -1,3 +1,4 @@
+
 namespace :jruby do
 
   task :init do
@@ -5,24 +6,24 @@ namespace :jruby do
     FileUtils.mkdir_p 'tmp'
   end
 
-  desc 'extract jruby and all gems'
+  desc 'extract jruby and all the current gems into the tmp folder'
   task :extract => :init do
     extract
   end
 
-  desc 'repackage all the jruby stuff and gems into the jar file'
+  desc 'repackage jruby and gems from tmp into the jruby-gems.jar file '
   task :repackage do 
     repackage
   end
 
-  desc 'add a gem to the packaged jar file for jruby'
+  desc 'add a gem to the jruby-gems.jar file'
   task :add_gem, [:gem_name] => :extract do |task, args|
     gem_name = args[:gem_name].strip
     `java -jar jruby-gems.jar -S gem install -i tmp #{gem_name}`
     repackage
   end
 
-  desc 'uninstall a gem in the packaged jar file for jruby'
+  desc 'uninstall a gem from the jruby-gems.jar file'
   task :uninstall_gem, [:gem_name] => :extract do |task, args|
     gem_name = args[:gem_name].strip
     `java -jar jruby-gems.jar -S gem uninstall -i tmp #{gem_name}`
@@ -37,6 +38,6 @@ namespace :jruby do
 
   def repackage
     FileUtils.rm_f 'jruby-gems.jar'
-    sh 'jar -cfm jruby-gems.jar jruby-gems.manifest -C tmp .'
+    `jar -cfm jruby-gems.jar jruby-gems.manifest -C tmp .`
   end
 end

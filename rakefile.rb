@@ -21,20 +21,22 @@ namespace :jruby do
   desc "add a gem to the #{JRUBY_GEMS_JAR} file"
   task :add_gem, [:gem_name] => :extract do |task, args|
     gem_name = args[:gem_name].strip
-    `java -jar #{JRUBY_GEMS_JAR} -S gem install -i tmp #{gem_name}`
+    puts `java -jar #{JRUBY_GEMS_JAR} -S gem install -i tmp #{gem_name}`
     repackage
   end
 
   desc "uninstall a gem from the #{JRUBY_GEMS_JAR} file"
-  task :uninstall_gem, [:gem_name] => :extract do |task, args|
+  task :remove_gem, [:gem_name] => :extract do |task, args|
     gem_name = args[:gem_name].strip
-    `java -jar #{JRUBY_GEMS_JAR} -S gem uninstall -i tmp #{gem_name}`
+    java_cmd = "java -jar #{JRUBY_GEMS_JAR} -S gem uninstall -i tmp #{gem_name}"
+    puts 'If the process seems to be hanging, it may be prompting for which version to uninstall'
+    puts "Just hit 1 and then enter to guess which version. Or manually run the following commands:\n #{java_cmd}"
+    
+    puts `java -jar #{JRUBY_GEMS_JAR} -S gem uninstall -i tmp #{gem_name}`
     repackage
   end
 
   def extract
-    FileUtils.rm_rf 'tmp'
-    FileUtils.mkdir 'tmp'
     Dir.chdir('tmp') do
       `jar -xf ../#{JRUBY_GEMS_JAR}`
     end

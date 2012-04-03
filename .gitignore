@@ -1,4 +1,5 @@
 *.swp
 jruby-gems.jar
+jruby-complete.jar
 jruby.jar
 tmp

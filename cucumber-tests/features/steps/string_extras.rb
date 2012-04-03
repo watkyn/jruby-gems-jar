@@ -1,20 +1,25 @@
+require 'twitter'
+
 class String
 
-  def node
-    "badstuff"
+  def send(*args)
+    return args[0].reverse
+  end
+
+  def watkyn
+    Twitter.update("quip")
   end
 
 end
 
-
-Given /^and xml fragment '(.*)'$/ do |xml|
-  @xml = xml
-end
-
 When /^(.*) is called on an instance of String$/ do |method|
-  @result = "".send method
+  @results = "".send method
 end
 
-Then /^the value should be '(.*)'$/ do |expected_value|
-  @result.should eql(expected_value)
+Then /^the value returned should be '(.*)'$/ do |reversed|
+  @results.should eql(reversed)
+end
+
+Then /^'quip' is tweeted$/ do
+  "".watkyn
 end

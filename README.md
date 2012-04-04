@@ -4,6 +4,8 @@ Sometimes a really simple solution is best. For distributing a ruby environment 
 a single jar file containing a ruby runtime and all the gems you want for your project 
 can be a really simple way to go.
 
+That is what this little project tries to do - package up ruby and all your gems into a single jar file, along with any executables from those gems.
+
 ## Getting Started
 
 - First, download the jruby-complete.jar file from the latest jruby release at http://jruby.org/download.

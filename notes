@@ -1,41 +1,25 @@
-# gems locally
+# Agenda
+- The problem we were facing at JAMF
+- Intro to jruby-complete.jar
+- Adding gems to jruby-gems.jar
+- Writing some cucumber and deploying to windows with the jruby-gems.jar
+- Add another gem into jruby-gems.jar
+- Take a look at the rakefile
+- Take a quick look at the JAMF Jenkins server
+
+
+# serving up gems from my machine
 gem server 
 gem sources (lists the current sources)
 gem sources --add http://localhost:8808
 
-cucumber requires these gems:
 
-Successfully installed json-1.6.6-java
-Successfully installed gherkin-2.9.3-java
-Successfully installed term-ansicolor-1.0.7
-Successfully installed builder-3.0.0
-Successfully installed diff-lcs-1.1.3
-Successfully installed cucumber-1.1.9
-Successfully installed rspec-core-2.9.0
-Successfully installed rspec-expectations-2.9.0
-Successfully installed rspec-mocks-2.9.0
-Successfully installed rspec-2.9.0
-
-
-# commands that can be run against the jruby.jar file
+# jruby-complete things you can do
 java -jar jruby-gems.jar --version
 java -jar jruby-gems.jar -e 'puts "goodbye space"'
 java -jar jruby-gems.jar -S irb
 java -jar jruby-gems.jar -S gem list -l
+java -jar jruby-gems.jar -S testing.rb
 
-
-# Left to do:
-- Figure out how to install gems from a local gem server to avoid wireless demo issues.
-
-
-
-# issues I've run into
-
-sometimes the jruby-complete.jar file that I download on OS X does not work with -S gem list -l
-it gives me a LoadError - rubygems.
-
-# do some cucumber stuff
-
-write a cucumber scenario
 
 

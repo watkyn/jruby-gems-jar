@@ -30,9 +30,9 @@ namespace :jruby do
     gem_name = args[:gem_name].strip
     java_cmd = "java -jar #{JRUBY_GEMS_JAR} -S gem uninstall -i tmp #{gem_name}"
     puts 'If the process seems to be hanging, it may be prompting for which version to uninstall'
-    puts "Just hit 1 and then enter to guess which version. Or manually run the following commands:\n #{java_cmd}"
+    puts "Just hit 1 and then enter to guess which version. Or manually run the following command:\n #{java_cmd}"
     
-    puts `java -jar #{JRUBY_GEMS_JAR} -S gem uninstall -i tmp #{gem_name}`
+    puts `#{java_cmd}`
     repackage
   end
 
@@ -47,4 +47,5 @@ namespace :jruby do
     FileUtils.mv(Dir.glob('tmp/bin/*'), 'tmp/META-INF/jruby.home/bin')
     `jar -cfm #{JRUBY_GEMS_JAR} jruby-gems.manifest -C tmp .`
   end
+
 end

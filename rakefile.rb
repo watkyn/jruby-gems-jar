@@ -1,4 +1,3 @@
-
 JRUBY_GEMS_JAR = 'jruby-gems.jar'
  
 namespace :jruby do
@@ -16,6 +15,21 @@ namespace :jruby do
   desc "repackage jruby and gems from tmp into the #{JRUBY_GEMS_JAR} file"
   task :repackage do 
     repackage
+  end
+  
+  desc "add gem server resource"
+  task :add_source,[:source] do |task, args|
+    `java -jar #{JRUBY_GEMS_JAR} -S gem source -a #{args[:source]}`
+  end
+
+  desc "install gems from list file, does not work if you append version i.e. factory_girl -v '2.6.4'"
+  task :install_from_list,[:file] => :extract do |task, args|
+    if File.exist?(args[:file])
+      gems = File.read(args[:file]).gsub("\n"," ") 
+      puts `java -jar #{JRUBY_GEMS_JAR} -S gem install -i tmp #{gems}`
+    else
+      puts "Could not find file."  
+    end
   end
 
   desc "add a gem to the #{JRUBY_GEMS_JAR} file"

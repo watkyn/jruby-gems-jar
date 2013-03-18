@@ -16,36 +16,29 @@ namespace :jruby do
   task :repackage do 
     repackage
   end
-  
-  desc "add gem server resource"
-  task :add_source,[:source] do |task, args|
-    `java -jar #{JRUBY_GEMS_JAR} -S gem source -a #{args[:source]}`
-  end
-
-  desc "install gems from list file, does not work if you append version i.e. factory_girl -v '2.6.4'"
-  task :install_from_list,[:file] => :extract do |task, args|
-    if File.exist?(args[:file])
-      gems = File.read(args[:file]).gsub("\n"," ") 
-      puts `java -jar #{JRUBY_GEMS_JAR} -S gem install -i tmp #{gems}`
-    else
-      puts "Could not find file."  
-    end
-  end
 
   desc "add a gem to the #{JRUBY_GEMS_JAR} file"
-  task :add_gem, [:gem_name] => :extract do |task, args|
+  task :add_gem, [:gem_name, :version] => :extract do |task, args|
     gem_name = args[:gem_name].strip
-    puts `java -jar #{JRUBY_GEMS_JAR} -S gem install -i tmp #{gem_name}`
+    if args[:version]
+      version = args[:version].strip
+      puts `java -jar #{JRUBY_GEMS_JAR} -S gem install -i tmp #{gem_name} -v '#{version}'`
+    else
+      puts `java -jar #{JRUBY_GEMS_JAR} -S gem install -i tmp #{gem_name}`
+    end
     repackage
   end
 
   desc "uninstall a gem from the #{JRUBY_GEMS_JAR} file"
-  task :remove_gem, [:gem_name] => :extract do |task, args|
+  task :remove_gem, [:gem_name, :version] => :extract do |task, args|
     gem_name = args[:gem_name].strip
-    java_cmd = "java -jar #{JRUBY_GEMS_JAR} -S gem uninstall -i tmp #{gem_name}"
-    puts 'If the process seems to be hanging, it may be prompting for which version to uninstall'
-    puts "Just hit 1 and then enter to guess which version. Or manually run the following command:\n #{java_cmd}"
-    
+    if args[:version]
+      version = args[:version].strip
+      java_cmd = "java -jar #{JRUBY_GEMS_JAR} -S gem uninstall -i tmp #{gem_name} -v '#{version}' -I -a"
+    else
+      puts "If there are multiple versions of a gem installed, they will all be removed."
+      java_cmd = "java -jar #{JRUBY_GEMS_JAR} -S gem uninstall -i tmp #{gem_name} -I -a"
+    end
     puts `#{java_cmd}`
     repackage
   end
